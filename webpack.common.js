@@ -1,13 +1,14 @@
 const path = require("path");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const buildDirectory = "dist";
 
 const outputDirectory = buildDirectory + "/app";
 
 module.exports = {
-  mode: "development",
   entry: "./src/index.js",
 
   output: {
@@ -32,7 +33,8 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          "style-loader",
+          // remove: style-loader
+          MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
@@ -48,17 +50,15 @@ module.exports = {
     ],
   },
 
-  devServer: {
-    port: 3000,
-    hot: true,
-    open: true,
-  },
-
-  devtool: "inline-source-map",
-
   plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [path.join(__dirname, buildDirectory)],
+    }),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+    }),
+    new MiniCssExtractPlugin({
+      filename: "bundle.css",
     }),
   ],
 };
