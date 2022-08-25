@@ -38,6 +38,8 @@ module.exports = {
             options: {
               modules: {
                 auto: true,
+                mode: "local",
+                localIdentName: "[name]__[local]--[hash:base64:5]",
               },
             },
           },
